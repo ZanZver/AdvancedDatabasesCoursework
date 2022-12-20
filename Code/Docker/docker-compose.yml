@@ -4,7 +4,7 @@ name: MariadbCluster
 
 networks:
   app-tier:
-    driver: pato-net
+    driver: galera-cluster-net #docker network create -d bridge galera-cluster-net 
 
 services:
   mariadb-galera-0:
