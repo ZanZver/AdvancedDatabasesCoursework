@@ -18,7 +18,7 @@ services:
       - MARIADB_ROOT_PASSWORD=my_root_password
       - MARIADB_USER=my_user
       - MARIADB_PASSWORD=my_password
-      - MARIADB_DATABASE=my_database
+      - MARIADB_DATABASE=Airport_DB
     ports:
       - "30330:3306"
     healthcheck:
