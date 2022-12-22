@@ -1,5 +1,13 @@
 /*
 ================================================================================================================================================
+        Specify use of Airport_DB database
+================================================================================================================================================
+*/
+
+USE Airport_DB;
+
+/*
+================================================================================================================================================
         Create tables
 ================================================================================================================================================
 */
@@ -56,11 +64,11 @@ CREATE TABLE `Employee` (
   `Employment_Type` varchar(24) NOT NULL,
   `Salary` decimal(15,2) NOT NULL,
   `Supervisor` int(11) DEFAULT NULL COMMENT 'ID of the Employee that is supervisor',
-  `AddressLine1` varchar(48) NOT NULL,
-  `AddressLine2` varchar(48) DEFAULT NULL,
+  `Address_Line_1` varchar(48) NOT NULL,
+  `Address_Line_2` varchar(48) DEFAULT NULL,
   `Postcode` varchar(32) NOT NULL,
   `City` varchar(48) NOT NULL,
-  `BirthDate` date NOT NULL,
+  `Birth_Date` date NOT NULL,
   `Parking_Spot_FK` int(11) DEFAULT NULL,
   `Vehicle_FK` int(11) DEFAULT NULL,
   `Department_FK` int(11) NOT NULL,
@@ -82,10 +90,11 @@ CREATE TABLE `Flight` (
 
 -- Person Name table
 CREATE TABLE `Name` (
+  `Person_ID` int(11) NOT NULL,
   `First_Name` varchar(48) NOT NULL,
   `Middle_Name` varchar(48) DEFAULT NULL,
   `Last_Name` varchar(48) NOT NULL,
-  `Person_ID` int(11) NOT NULL
+  `Is_Employee` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Parking Token table
