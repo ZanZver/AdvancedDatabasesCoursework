@@ -1,0 +1,30 @@
+\section{Database Implementation}\label{Section label}
+A list of the SQL table creation commands you used plus commands for
+any extra actions such as adding constraints or changing table
+characteristics.
+A list of the SQL Insert commands that aims to insert at least three
+records in each table.
+A listing of your test commands/queries and, for the SELECT queries, a
+listing of their output (or part of the output if the output is very big). Divide your commands/queries into clearly labelled sections corresponding to what it is you're trying to test or retrieve. More credit will be given for meaningful queries which use two or more techniques to make something useful. Think about the kinds of queries that the business might find useful.
+Your project should explain the query performance and planning.
+Your project should exploit at least one query optimization technique.
+Your project might test the concurrency control of your database by
+running the various queries in separate sessions, you can simulate the
+real-life operation of your enterprise.
+\subsection{Subsection}\label{subsection}
+Database Implementation - Table creation (groupwork - 5\%) \newline
+It is basically quite straightforward and uses the CREATE TABLE command.
+Use sensible value domains (data types) for the attributes in each table. You can stick to the sort of value domain used in examples in the Additional Notes or textbook, but of course you can branch out and look at the Reference Manual. Include appropriate constraints (e.g. primary key, foreign key, references, unique, not-null, default and check constraints). If you wish, you can add extra sorts of constraint.
+\\
+\\
+Database Implementation - Getting Data into Tables (groupwork - 5\%) \newline
+Populate your database with sample data to allow testing of the schema. Each table should have a minimum of three rows. You must also exercise at least two of your constraints (e.g. check and default constraints) being sure it correctly catches errors while allowing legitimate data. (Note: you do not need to test not null constraints.) You must turn in printouts of the results of these tests indicating that the SQL statements for your requirements worked correctly and that your constraints correctly allowed good data and caught bad data.
+\\
+\\
+Database Implementation - Test SQL Queries (individual work- 25\%) \newline
+I'd like you to show the operation of queries that test whether your tables work appropriately. Your queries aim to retrieve vital information that is important for the operation of your database application.\newline
+Each student will do the following:
+\begin{itemize}
+    \item develop at least three queries about your database, addressing user’s needs, and a correct implementation in SQL. Your SQL statements should require a variety of SQL capabilities such as various kinds of join, aggregate functions, order by, distinct, nested queries etc.
+    \item Exploit at least one query or database optimization technique (clustering, partitioning OR indexing)
+\end{itemize}
