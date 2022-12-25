@@ -1,0 +1,56 @@
+Things to do for assignment:
+
+
+The Database Analysis (groupwork - 5%)
+You need to provide a reasonably comprehensive description of the domain of the project. List your entities, attributes, relationship constraints as well as business rules and assumptions.
+    COMMENT: mostly done
+    
+
+
+The Database Design (groupwork - 10%)
+Create an Entity-Relationship Diagram of your project database using the Chen model
+diagram. Your database design should include (Minimum requirements):
+• at least 8 interrelated entity sets, and at least 40 attributes (total),
+• enough relationships to connect each entity set to at least one other entity set.
+• be sure to indicate identifying attributes (primary keys)
+• put relationship constraints (i.e., connectivity, cardinality and participation).
+• one or more M:N relationships,
+• one or more recursive relationship
+• one or more multivalued attributes.
+When you are confident you have a fully qualified diagram, it is desirable that you render your diagram using an E/R design tool, such as (http://www.conceptdraw.com/en/products/cd5/main.php) (this gives you a free trial for 30 days) or http://drive.draw.io/ (There is an E/R style diagram under the "Software design" templates). Alternatively, you can draw your diagram using a simple Microsoft word diagramming tools and shapes.
+It is very important to discuss your ER design with your tutors. During w/c 21st Nov 2022 of the semester each team will submit a document detailing the domain of interest, the database analysis and your ER design description. Students will receive formative feedback about their database design during the presentation.
+    COMMENT: mostly done
+    
+
+
+The Database Normalization (groupwork - 10%)
+Convert your ERD diagram to a relational database schema, i.e. a set of tables, each with appropriate attributes, a primary key, and appropriate foreign keys. A schema diagram for your database, with primary and foreign keys specified appropriately. This is one where every entity type in the diagram corresponds to a table. In this ERM you must have introduced bridging types, must have introduced the special implementation of the symmetric relationship, and must have introduced a handling of the multivalued attributes. Go through the normalization process to come up with a collection of tables that are in third normal forms. Primary and foreign keys should be specified appropriately.
+    COMMENT: mostly done
+    
+
+
+Database Implementation - Table creation (groupwork - 5%)
+It is basically quite straightforward and uses the CREATE TABLE command.
+Use sensible value domains (data types) for the attributes in each table. You can stick to the sort of value domain used in examples in the Additional Notes or textbook, but of course you can branch out and look at the Reference Manual. Include appropriate constraints (e.g. primary key, foreign key, references, unique, not-null, default and check constraints). If you wish, you can add extra sorts of constraint.
+    COMMENT: mostly done
+    
+
+
+Database Implementation - Getting Data into Tables (groupwork - 5%)
+Populate your database with sample data to allow testing of the schema. Each table should have a minimum of three rows. You must also exercise at least two of your constraints (e.g. check and default constraints) being sure it correctly catches errors while allowing legitimate data. (Note: you do not need to test not null constraints.) You must turn in printouts of the results of these tests indicating that the SQL statements for your requirements worked correctly and that your constraints correctly allowed good data and caught bad data.
+    COMMENT: ToDo
+    
+
+
+Database Implementation - Test SQL Queries (individual work- 25%)
+I'd like you to show the operation of queries that test whether your tables work appropriately. Your queries aim to retrieve vital information that is important for the operation of your database application.
+Each student will do the following:
+• develop at least three queries about your database, addressing user’s needs, and a correct implementation in SQL. Your SQL statements should require a variety of SQL capabilities such as various kinds of join, aggregate functions, order by, distinct, nested queries etc.
+• Exploit at least one query or database optimization technique (clustering, partitioning OR indexing)
+    COMMENT: ToDo
+    
+
+
+Oral examination (viva) (groupwork - 20%)
+Each student will be orally examined though a viva organized with their group. Each individual will set aside a significant percentage of marks for showing an understanding of the work the group has submitted.
+    COMMENT: done
