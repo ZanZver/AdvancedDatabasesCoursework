@@ -16,8 +16,9 @@ USE Airport_DB;
 CREATE TABLE `Airline` (
   `Company_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Company_Name` varchar(64) NOT NULL,
-  `Revenue` decimal(15,2) NOT NULL,
-  PRIMARY KEY (`Company_ID`)
+  `Revenue` decimal(15,2) NOT NULL COMMENT 'Revenue needs to be at least 10000 per month',
+  PRIMARY KEY (`Company_ID`),
+  CHECK(`Revenue`>=10000)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Certificate table
@@ -42,9 +43,10 @@ CREATE TABLE `CompanyVehicle` (
 -- Customer table
 CREATE TABLE `Customer` (
   `Customer_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Express_Lane` tinyint(1) NOT NULL DEFAULT 0,
+  `Express_Lane` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Data needs to be 0 (default) if there is no express lane or 1 if user has express lane',
   `Token_FK` int(11) DEFAULT NULL,
-  PRIMARY KEY (`Customer_ID`)
+  PRIMARY KEY (`Customer_ID`),
+  CHECK(`Express_Lane`<=1 or `Express_Lane`>=0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Department table
@@ -62,7 +64,7 @@ CREATE TABLE `Employee` (
   `Termination_Date` date NOT NULL,
   `Title` varchar(24) NOT NULL,
   `Employment_Type` varchar(24) NOT NULL,
-  `Salary` decimal(15,2) NOT NULL,
+  `Salary` decimal(15,2) NOT NULL COMMENT 'Salary is minimum of 2160 per year. Person is paid £9/h (minimum) * 5h (minimum per week) * 4 (whole month) * 12 (months in year) = 2160',
   `Supervisor` int(11) DEFAULT NULL COMMENT 'ID of the Employee that is supervisor',
   `Address_Line_1` varchar(48) NOT NULL,
   `Address_Line_2` varchar(48) DEFAULT NULL,
@@ -73,7 +75,8 @@ CREATE TABLE `Employee` (
   `Vehicle_FK` int(11) DEFAULT NULL,
   `Department_FK` int(11) NOT NULL,
   `Manage_Department` int(11) DEFAULT NULL,
-  PRIMARY KEY (`Employee_ID`)
+  PRIMARY KEY (`Employee_ID`),
+  CHECK(`Salary`>=2160)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='Storing employee details';
 
 -- Flight table
@@ -94,7 +97,8 @@ CREATE TABLE `Name` (
   `First_Name` varchar(48) NOT NULL,
   `Middle_Name` varchar(48) DEFAULT NULL,
   `Last_Name` varchar(48) NOT NULL,
-  `Is_Employee` tinyint(1) NOT NULL DEFAULT 0
+  `Is_Employee` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Data needs to be 0 (default) if person is not employee or 1 if they are employee',
+  CHECK(`Is_Employee`<=1 or `Is_Employee`>=0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Parking Token table
@@ -107,9 +111,11 @@ CREATE TABLE `ParkingToken` (
 -- Runway table
 CREATE TABLE `Runway` (
   `Runway_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Length` decimal(10,0) NOT NULL,
-  `Width` decimal(10,0) NOT NULL,
-  PRIMARY KEY (`Runway_ID`)
+  `Length` decimal(10,0) NOT NULL COMMENT 'Length needs to be at least 10, combined with Width it can be helipad. Longest it can be is 3km.',
+  `Width` decimal(10,0) NOT NULL COMMENT 'Width needs to be at least 10, combined with Length it can be helipad. Max width acceptable is 500m.',
+  PRIMARY KEY (`Runway_ID`),
+  CHECK(`Length`>=10 and `Length`<=3000),
+  CHECK(`Width`>=10 and `Width`<=500)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Ticket table
@@ -124,8 +130,9 @@ CREATE TABLE `Ticket` (
 CREATE TABLE `CustomerParkingSpot` (
   `Parking_Spot_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Parking_Type` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`Parking_Type`)),
-  `Price_Per_Hour` decimal(15,2) NOT NULL,
-  PRIMARY KEY (`Parking_Spot_ID`)
+  `Price_Per_Hour` decimal(15,2) NOT NULL COMMENT 'Minimum pricing per hour is £5 and maximum is £300',
+  PRIMARY KEY (`Parking_Spot_ID`),
+  CHECK(`Price_Per_Hour`>=5 and `Price_Per_Hour`<=300)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Qualification table
