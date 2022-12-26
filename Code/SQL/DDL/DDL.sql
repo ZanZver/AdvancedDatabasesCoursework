@@ -310,3 +310,19 @@ ALTER TABLE Airport_DB.Name ADD CONSTRAINT Name_FK_Employee FOREIGN KEY (Person_
 -- Ticket table
 ALTER TABLE Airport_DB.Ticket ADD CONSTRAINT Ticket_FK_Flight FOREIGN KEY (Flight_FK) REFERENCES Airport_DB.Flight(Flight_ID) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE Airport_DB.Ticket ADD CONSTRAINT Ticket_FK_Customer FOREIGN KEY (Customer_FK) REFERENCES Airport_DB.Customer(Customer_ID) ON DELETE CASCADE ON UPDATE CASCADE;
+
+/*
+================================================================================================================================================
+        Create views
+================================================================================================================================================
+*/
+
+CREATE VIEW CustomerNames AS
+SELECT Person_ID, First_Name, Middle_Name, Last_Name
+FROM Name n
+WHERE n.Is_Employee = 0;
+
+CREATE VIEW EmployeeNames AS
+SELECT Person_ID, First_Name, Middle_Name, Last_Name
+FROM Name n
+WHERE n.Is_Employee = 1;
