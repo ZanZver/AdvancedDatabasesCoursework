@@ -117,11 +117,18 @@ CREATE TABLE `Name` (
   PRIMARY KEY (`Person_ID`,`Is_Employee`),
   CHECK(`Is_Employee`<=1 or `Is_Employee`>=0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*
+PARTITION BY RANGE (`Is_Employee`) (
+    PARTITION p0 VALUES LESS THAN (0),
+    PARTITION p1 VALUES LESS THAN (1),
+    PARTITION p2 VALUES LESS THAN (2)
+);*/
 
 -- Parking Token table
 CREATE TABLE `ParkingToken` (
   `Token_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Date` datetime NOT NULL,
+  `Parking_Spot_FK` int(11) NOT NULL,
   PRIMARY KEY (`Token_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -245,12 +252,12 @@ INSERT INTO Airport_DB.Name (Person_ID, First_Name, Middle_Name, Last_Name, Is_E
 VALUES (3, 'FN_6', null, 'LN_6', 0);
 
 -- Parking Token table
-INSERT INTO Airport_DB.ParkingToken (Token_ID, `Date`)
-VALUES (1, '2022-01-10 11:11:00');
-INSERT INTO Airport_DB.ParkingToken (Token_ID, `Date`)
-VALUES (2, '2022-02-20 22:00:00');
-INSERT INTO Airport_DB.ParkingToken (Token_ID, `Date`)
-VALUES (3, '2022-03-30 15:30:00');
+INSERT INTO Airport_DB.ParkingToken (Token_ID, `Date`, Parking_Spot_FK)
+VALUES (1, '2022-01-10 11:11:00',1);
+INSERT INTO Airport_DB.ParkingToken (Token_ID, `Date`, Parking_Spot_FK)
+VALUES (2, '2022-02-20 22:00:00',2);
+INSERT INTO Airport_DB.ParkingToken (Token_ID, `Date`, Parking_Spot_FK)
+VALUES (3, '2022-03-30 15:30:00',3);
 
 -- Runway table
 INSERT INTO Airport_DB.Runway (Runway_ID, `Length`, Width)
