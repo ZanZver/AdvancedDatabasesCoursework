@@ -23,8 +23,8 @@ CREATE TABLE `Airline` (
 
 -- Certificate table
 CREATE TABLE `Certificate` (
+  `Certificate_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Employee_FK` int(11) NOT NULL,
-  `Certificate_ID` int(11) NOT NULL,
   `Certificate_Name` varchar(64) NOT NULL,
   `Achievement_Level` varchar(32) NOT NULL,
   `Qualification_FK` int(11) DEFAULT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE `Employee` (
   `Employee_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Hire_Date` date NOT NULL,
   `Termination_Date` date NULL,
-  `Title` varchar(24) NOT NULL,
+  `Title` varchar(48) NOT NULL,
   `Employment_Type` varchar(24) NOT NULL,
   `Salary` decimal(15,2) NOT NULL COMMENT 'Salary is minimum of 2160 per year. Person is paid £9/h (minimum) * 5h (minimum per week) * 4 (whole month) * 12 (months in year) = 2160',
   `Supervisor` int(11) DEFAULT NULL COMMENT 'ID of the Employee that is supervisor',
@@ -138,8 +138,8 @@ CREATE TABLE `Runway` (
   `Length` decimal(10,0) NOT NULL COMMENT 'Length needs to be at least 10, combined with Width it can be helipad. Longest it can be is 3km.',
   `Width` decimal(10,0) NOT NULL COMMENT 'Width needs to be at least 10, combined with Length it can be helipad. Max width acceptable is 500m.',
   PRIMARY KEY (`Runway_ID`),
-  CHECK(`Length`>=10 and `Length`<=3000),
-  CHECK(`Width`>=10 and `Width`<=500)
+  CHECK(`Length`>=2000 and `Length`<=4000),
+  CHECK(`Width`>=8 and `Width`<=80)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Ticket table
@@ -164,7 +164,7 @@ CREATE TABLE `Qualification` (
         Add Temp Data
 ================================================================================================================================================
 */
-
+/*
 -- Airline table
 INSERT INTO Airport_DB.Airline (Company_ID, Company_Name, Revenue) 
 VALUES (1, 'Company_1', 20000.00);
@@ -282,7 +282,7 @@ INSERT INTO Airport_DB.Qualification (Qualification_ID, Qualification_Type, Qual
 VALUES (2, "Type_2", "Name_2");
 INSERT INTO Airport_DB.Qualification (Qualification_ID, Qualification_Type, Qualification_Name)
 VALUES (3, "Type_3", "Name_3");
-
+*/
 /*
 ================================================================================================================================================
         Add foregin keys
