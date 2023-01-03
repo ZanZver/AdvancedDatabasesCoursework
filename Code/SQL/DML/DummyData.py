@@ -21,10 +21,10 @@ from mysql.connector import Error
 #===============================================================
 # Define data 
 #===============================================================
-increment = 4
+#increment = 4
 #autoincrement is set to 4 on my machine for some reason and I have no idea how to fix it. 
 # if it works fine on your end just replace the value above with 1
-start = 1 
+#start = 1 
 no_runways = 10
 no_airlines = 50
 no_flights= 80
@@ -53,8 +53,8 @@ fake.add_provider(VehicleProvider)
 # Functions
 #===============================================================
 
-def generate_id(start, increment,no):
-    return random.randrange(0,no-1)*increment+start
+#def generate_id(start, increment,no):
+#    return random.randrange(0,no-1)*increment+start
 
 #===============================================================
 # SQL Functions
@@ -234,8 +234,7 @@ def generateEmployees(dbConnection):
     departmentIDs = getIDs(dbConnection, departmentQuery)
     
     for x in range(no_employees):
-        employees =[
-            {
+        employees =[{
                 "Hire_Date":str(fake.date_this_decade()),
                 "Termination_Date":str(fake.date_this_decade()) if (random.randrange(1,10)<2) else "null", #20% turnover,
                 "Title": fake.job(),
@@ -251,8 +250,7 @@ def generateEmployees(dbConnection):
                 "Vehicle_FK":random.choice(companyVehicleIDs),
                 "Department_FK":random.choice(departmentIDs),
                 "Manage_Department":random.choice(departmentIDs)
-            }
-            ]
+            }]
         
         execute_query(dbConnection, "USE Airport_DB;")
         populate(dbConnection,employees,"Employee")
