@@ -95,6 +95,14 @@ def getIDs(connection, IDquery):
     except Error as err:
         print(f"Error: '{err}'")
         print(f"Query: '{IDquery}'")
+        
+def generateSupervisor(dbConnection):
+    employeeQuery = "SELECT Employee_ID FROM Employee;"
+    employeeIDs = getIDs(dbConnection, employeeQuery)
+    if(len(employeeIDs) != 0):
+        return random.choice(employeeIDs)
+    else:
+        return 'null'
 
 #get column names and the values for the sql query. Might act funny when there is only one attribute,
 # which is why we covered it as a special case.
@@ -225,28 +233,29 @@ def generateEmployees(dbConnection):
     companyVehicleIDs = getIDs(dbConnection, companyVehicleQuery)
     departmentIDs = getIDs(dbConnection, departmentQuery)
     
-    employees =[
-        {
-            "Hire_Date":str(fake.date_this_decade()),
-            "Termination_Date":str(fake.date_this_decade()) if (random.randrange(1,10)<2) else "null", #20% turnover,
-            "Title": fake.job(),
-            "Employment_Type":random.choice(employment_types),
-            "Salary":random.uniform(3000,100000),
-            "Supervisor":a if (a:=generate_id(start,increment,no_employees)<x*increment+1)else 1, #if the generated supervisor does not exist then we assign the CEO (employee 1) as supervisor
-            "Address_Line_1":fake.street_name(),
-            "Address_Line_2":fake.building_number(),
-            "Postcode": fake.postcode(),
-            "City": fake.city(),
-            "Birth_Date":str(fake.date_this_century()),
-            "Parking_Spot_FK":random.choice(employeeParkingSpotIDs),
-            "Vehicle_FK":random.choice(companyVehicleIDs),
-            "Department_FK":random.choice(departmentIDs),
-            "Manage_Department":random.choice(departmentIDs)
-        }for x in range(no_employees)
-        ]
-    
-    execute_query(dbConnection, "USE Airport_DB;")
-    populate(dbConnection,employees,"Employee")
+    for x in range(no_employees):
+        employees =[
+            {
+                "Hire_Date":str(fake.date_this_decade()),
+                "Termination_Date":str(fake.date_this_decade()) if (random.randrange(1,10)<2) else "null", #20% turnover,
+                "Title": fake.job(),
+                "Employment_Type":random.choice(employment_types),
+                "Salary":random.uniform(3000,100000),
+                "Supervisor":generateSupervisor(dbConnection),
+                "Address_Line_1":fake.street_name(),
+                "Address_Line_2":fake.building_number(),
+                "Postcode": fake.postcode(),
+                "City": fake.city(),
+                "Birth_Date":str(fake.date_this_century()),
+                "Parking_Spot_FK":random.choice(employeeParkingSpotIDs),
+                "Vehicle_FK":random.choice(companyVehicleIDs),
+                "Department_FK":random.choice(departmentIDs),
+                "Manage_Department":random.choice(departmentIDs)
+            }
+            ]
+        
+        execute_query(dbConnection, "USE Airport_DB;")
+        populate(dbConnection,employees,"Employee")
         
     print("===============================================================")
     print("Employee table finished")
