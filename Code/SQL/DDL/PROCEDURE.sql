@@ -11,7 +11,7 @@
 ================================================================================================================================================
 */
 CREATE DEFINER=`my_user`@`%` 
-PROCEDURE `Airport_DB`.`GetParkingToBePaid2` (Filter_Customer_ID int(11))
+PROCEDURE `Airport_DB`.`GetParkingToBePaid` (Filter_Customer_ID int(11))
 BEGIN
 	SELECT c.Customer_ID
           , pt.Token_ID
