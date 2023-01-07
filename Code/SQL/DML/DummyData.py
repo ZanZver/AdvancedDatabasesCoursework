@@ -21,10 +21,6 @@ from mysql.connector import Error
 #===============================================================
 # Define data 
 #===============================================================
-#increment = 4
-#autoincrement is set to 4 on my machine for some reason and I have no idea how to fix it. 
-# if it works fine on your end just replace the value above with 1
-#start = 1 
 no_runways = 10
 no_airlines = 50
 no_flights= 80
@@ -38,6 +34,8 @@ no_tokens = 1500
 no_tickets = 2000
 no_vehicles = 80
 no_certs = 50
+driving_cats= ["A","B","C","D", "H","M"]
+parking_types = ["Car Parking", "Motor Parking", "Handicap Parking"] 
 department_names = ["Landside operations", "Airside operations", "Billing and invoicing", "Information management"]
 employment_types = ["Full-time", "Part-time", "Casual", "Fixed term", "Contract", "Apprentice", "Trainee", "Commission", "Piece rate"]
 
@@ -52,9 +50,6 @@ fake.add_provider(VehicleProvider)
 #===============================================================
 # Functions
 #===============================================================
-
-#def generate_id(start, increment,no):
-#    return random.randrange(0,no-1)*increment+start
 
 #===============================================================
 # SQL Functions
@@ -90,7 +85,6 @@ def getIDs(connection, IDquery):
     try:
         cursor.execute(IDquery)
         table = cursor.fetchall()
-        #print("Query successful")
         return([x[0] for x in table])
     except Error as err:
         print(f"Error: '{err}'")
@@ -104,8 +98,6 @@ def generateSupervisor(dbConnection):
     else:
         return 'null'
 
-#get column names and the values for the sql query. Might act funny when there is only one attribute,
-# which is why we covered it as a special case.
 def get_data(entry):
     output = (str(tuple(entry.keys())).replace("'",""), str(tuple(entry.values())))
     return output if output[0][-2]!= "," else (output[0][:-2]+output[0][-1],output[1][:-2]+output[1][-1])
@@ -115,17 +107,14 @@ def populate(connection, lst, target):
     for entry in lst:
         columns,values= get_data(entry)
         query = ("INSERT INTO "+ target+ " "+ columns+ " VALUES "+ values).replace("'null'","null")
-        #print(query+"\n")
         execute_query(connection, query)
-    #print("Populated " + target + "\n")
-
 
 #===============================================================
 # Dummy data generation for every table
 #===============================================================
 def generateAirlines(dbConnection):
-    airlines = [
-        {"Company_Name":fake.airline(),
+    airlines = [{
+        "Company_Name":fake.airline(),
         "Revenue":random.uniform(10000,100000)
         } for x in range(no_airlines)]
     
@@ -142,14 +131,12 @@ def generateCertificates(dbConnection):
     employeeIDs = getIDs(dbConnection, employeeQuery)
     qualificationIDs = getIDs(dbConnection, qualificationQuery)
     
-    certificates = [
-        {
+    certificates = [{
         "Employee_FK":random.choice(employeeIDs),
         "Certificate_Name":fake.sentence(5),
         "Achievement_Level":fake.sentence(3),
         "Qualification_FK": random.choice(qualificationIDs)
         }for x in range(no_certs)]
-    #certficates must be done by hand if we have time.  the name and the level don't really make sense. but it is good placeholder data
     
     execute_query(dbConnection, "USE Airport_DB;")
     populate(dbConnection, certificates, "Certificate")
@@ -159,11 +146,10 @@ def generateCertificates(dbConnection):
     print("===============================================================")
     
 def generateCompanyVehicles(dbConnection):
-    driving_cats= ["A","B","C","D", "H","M"]
     departmentQuery = "SELECT Department_ID FROM Department;"
     departmentIDs = getIDs(dbConnection, departmentQuery)
-    vehicles =[
-        {"Vehicle_Name":fake.machine_year_make_model(),
+    vehicles =[{
+        "Vehicle_Name":fake.machine_year_make_model(),
         "Vehicle_Driving_License_Requirement":random.choice(driving_cats),
         "Department_FK":random.choice(departmentIDs)
         } for x in range(no_vehicles)
@@ -178,8 +164,8 @@ def generateCompanyVehicles(dbConnection):
 def generateCustomers(dbConnection):
     parkingSpotQuery = "SELECT Parking_Spot_ID FROM CustomerParkingSpot;"
     parkingSpotIDs = getIDs(dbConnection, parkingSpotQuery)
-    customers =   [
-        {"Express_Lane":0 if (random.randrange(1,10)<9) else 1, #90% chance to not have express lane
+    customers = [{
+        "Express_Lane":0 if (random.randrange(1,10)<9) else 1, #90% chance to not have express lane
         "Token_FK":random.choice(parkingSpotIDs)
         } for x in range(no_customers)]
     
@@ -190,8 +176,7 @@ def generateCustomers(dbConnection):
     print("Customer table finished")
     print("===============================================================")
     
-def generateCustomerParkingSpots(dbConnection):
-    parking_types = ["Car Parking", "Motor Parking", "Handicap Parking"]      
+def generateCustomerParkingSpots(dbConnection):     
     stri=[]
     for x in range(no_customer_parking_spots):
         stri.append("{")
@@ -200,8 +185,8 @@ def generateCustomerParkingSpots(dbConnection):
             stri[x]+= '"'+str(y+1)+'":"'+parking_spot[y]+'", '
         stri[x] = stri[x][:-2]+"}"
         
-    customer_parking_spots =[
-        {"Parking_Type": stri[x],
+    customer_parking_spots =[{
+        "Parking_Type": stri[x],
         "Price_Per_Hour":random.randrange(5,300)
         }for x in range(no_customer_parking_spots)]
     
@@ -213,8 +198,8 @@ def generateCustomerParkingSpots(dbConnection):
     print("===============================================================")
     
 def generateDepartments(dbConnection):
-    departments =[
-        {"Department_Name":department_names[x],
+    departments =[{
+        "Department_Name":department_names[x],
         "Department_Location":fake.street_name()
         } for x in range(len(department_names))]
     
@@ -269,8 +254,8 @@ def generateEmployeeParking(dbConnection):
             strii[x]+= '"'+str(y+1)+'":"'+parking_spot[y]+'", '
         strii[x] = strii[x][:-2]+"}"
  
-    employee_parking_spots =[
-        {"Parking_Type": strii[x]
+    employee_parking_spots =[{
+            "Parking_Type": strii[x]
         }for x in range(no_employee_parking_spots)]   
     
     execute_query(dbConnection, "USE Airport_DB;")
@@ -286,8 +271,8 @@ def generateFlight(dbConnection):
     runwayIDs = getIDs(dbConnection, runwayQuery)
     airlineIDs = getIDs(dbConnection, airlineQuery)
     
-    flights = [
-        {"Plane_Model":''.join(random.choice(string.ascii_uppercase) for _ in range(5)),
+    flights = [{
+        "Plane_Model":''.join(random.choice(string.ascii_uppercase) for _ in range(5)),
         "Departure_Time":str(fake.date_time_this_decade()),
         "Destination":fake.city(),
         "Gate":random.randrange(10,30),
@@ -301,8 +286,8 @@ def generateFlight(dbConnection):
 def generateParkingTokens(dbConnection):
     parkingSpotQuery = "SELECT Parking_Spot_ID FROM CustomerParkingSpot;"
     parkingSpotIDs = getIDs(dbConnection, parkingSpotQuery)
-    parking_tokens = [
-        {"Date":str(fake.date_time_this_month()),
+    parking_tokens = [{
+        "Date":str(fake.date_time_this_month()),
         "Parking_Spot_FK":random.choice(parkingSpotIDs),
         } for x in range(no_tokens)]
     
@@ -314,12 +299,11 @@ def generateParkingTokens(dbConnection):
     print("===============================================================")
     
 def generateQualification(dbConnection):
-    qualifications = [
-        {"Qualification_Type":fake.sentence(5),
+    qualifications = [{
+        "Qualification_Type":fake.sentence(5),
         "Qualification_Name":fake.sentence(5)
         } for x in range(no_qualifs)]
-    #this sucks! might do it by hand
-    
+
     execute_query(dbConnection, "USE Airport_DB;")
     populate(dbConnection, qualifications, "Qualification")
         
@@ -328,8 +312,8 @@ def generateQualification(dbConnection):
     print("===============================================================")
 
 def generateRunway(dbConnection):
-    runways = [ 
-        {"Length":random.uniform(2000,4000),
+    runways = [{
+        "Length":random.uniform(2000,4000),
         "Width":random.uniform(8,80)
         } for x in range(no_runways)]
     
@@ -345,8 +329,8 @@ def generateTicket(dbConnection):
     flightQuery = "SELECT Flight_ID FROM Flight;"
     customerIDs = getIDs(dbConnection, customerQuery)
     flightIDs = getIDs(dbConnection, flightQuery)
-    tickets = [
-        {"Customer_FK":random.choice(customerIDs),
+    tickets = [{
+        "Customer_FK":random.choice(customerIDs),
         "Flight_FK":random.choice(flightIDs)
         } for x in range(no_tickets)]
     
@@ -361,8 +345,7 @@ def generateEmployeeNames(dbConnection):
     employeeQuery = "SELECT Employee_ID FROM Employee;"
     employeeIDs = getIDs(dbConnection, employeeQuery)
 
-    names = [
-        {
+    names = [{
         "Person_ID":employeeIDs[x],
         "First_Name":fake.first_name(),
         "Middle_Name":fake.first_name() if (random.randrange(1,10)<8) else "null", #some people do not have a middle name. chance: 20%
@@ -381,8 +364,7 @@ def generateCustomerNames(dbConnection):
     customerQuery = "SELECT Customer_ID FROM Customer;"
     customerIDs = getIDs(dbConnection, customerQuery)
 
-    names = [
-        {
+    names = [{
         "Person_ID":customerIDs[x],
         "First_Name":fake.first_name(),
         "Middle_Name":fake.first_name() if (random.randrange(1,10)<8) else "null", #some people do not have a middle name. chance: 20%
@@ -403,46 +385,18 @@ def generateCustomerNames(dbConnection):
 
 connection = create_server_connection("localhost","30330", "my_user", "my_password")
 
-# 1) - 10 runways
 generateRunway(connection)
-
-# 2) - 50 airlines
 generateAirlines(connection)
-
-# 3) - OK
 generateFlight(connection)
-
-# 4) - OK
 generateQualification(connection)
-
-# 5) - OK
 generateCustomerParkingSpots(connection)
-
-# 6) - OK
 generateEmployeeParking(connection)
-
-# 7) - OK
 generateParkingTokens(connection)
-
-# 8) - OK
 generateCustomers(connection)
-
-# 9) - OK
 generateTicket(connection)
-
-# 10) - OK
 generateDepartments(connection)
-
-# 11) - OK
 generateCompanyVehicles(connection)
-
-# 12) - OK
 generateEmployees(connection)
-
-# 13) - OK
 generateCertificates(connection)
-
-# 14a) - OK
 generateEmployeeNames(connection)
-# 14b) - OK
 generateCustomerNames(connection)
