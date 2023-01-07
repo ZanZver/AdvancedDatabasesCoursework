@@ -34,4 +34,4 @@ END;
 ================================================================================================================================================
 */
 -- Replace Customer_ID with desired ID
-CALL Airport_DB.GetParkingToBePaid2(Customer_ID);
+CALL Airport_DB.GetParkingToBePaid(Customer_ID);

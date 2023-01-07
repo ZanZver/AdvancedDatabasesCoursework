@@ -23,7 +23,7 @@ from mysql.connector import Error
 #===============================================================
 no_runways = 10
 no_airlines = 50
-no_flights= 80
+no_flights= 1500
 no_qualifs = 30
 no_tickets = 80
 no_customers = 2500
