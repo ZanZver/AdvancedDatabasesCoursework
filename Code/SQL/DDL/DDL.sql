@@ -71,7 +71,7 @@ CREATE TABLE `Employee` (
   `Employee_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Hire_Date` date NOT NULL,
   `Termination_Date` date NULL,
-  `Title` varchar(48) NOT NULL,
+  `Title` varchar(200) NOT NULL,
   `Employment_Type` varchar(24) NOT NULL,
   `Salary` decimal(15,2) NOT NULL COMMENT 'Salary is minimum of 2160 per year. Person is paid £9/h (minimum) * 5h (minimum per week) * 4 (whole month) * 12 (months in year) = 2160',
   `Supervisor` int(11) DEFAULT NULL COMMENT 'ID of the Employee that is supervisor',

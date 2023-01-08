@@ -79,7 +79,7 @@ def execute_query(connection, query):
         print(f"Error: '{err}'")
         print(f"Query: '{query}'")
 
-def getIDs(connection, IDquery):
+def get_ids(connection, IDquery):
     execute_query(connection, "USE Airport_DB;")
     cursor = connection.cursor()
     try:
@@ -90,11 +90,11 @@ def getIDs(connection, IDquery):
         print(f"Error: '{err}'")
         print(f"Query: '{IDquery}'")
         
-def generateSupervisor(dbConnection):
-    employeeQuery = "SELECT Employee_ID FROM Employee;"
-    employeeIDs = getIDs(dbConnection, employeeQuery)
-    if(len(employeeIDs) != 0):
-        return random.choice(employeeIDs)
+def generate_supervisor(dbConnection):
+    employee_query = "SELECT Employee_ID FROM Employee;"
+    employee_ids = get_ids(dbConnection, employee_query)
+    if(len(employee_ids) != 0):
+        return random.choice(employee_ids)
     else:
         return 'null'
 
@@ -112,7 +112,7 @@ def populate(connection, lst, target):
 #===============================================================
 # Dummy data generation for every table
 #===============================================================
-def generateAirlines(dbConnection):
+def generate_airlines(dbConnection):
     airlines = [{
         "Company_Name":fake.airline(),
         "Revenue":random.uniform(10000,100000)
@@ -125,17 +125,17 @@ def generateAirlines(dbConnection):
     print("Airline table finished")
     print("===============================================================")
     
-def generateCertificates(dbConnection):
-    employeeQuery = "SELECT Employee_ID FROM Employee;"
-    qualificationQuery = "SELECT Qualification_ID FROM Qualification;"
-    employeeIDs = getIDs(dbConnection, employeeQuery)
-    qualificationIDs = getIDs(dbConnection, qualificationQuery)
+def generate_certificates(dbConnection):
+    employee_query = "SELECT Employee_ID FROM Employee;"
+    qualification_query = "SELECT Qualification_ID FROM Qualification;"
+    employee_ids = get_ids(dbConnection, employee_query)
+    qualification_ids = get_ids(dbConnection, qualification_query)
     
     certificates = [{
-        "Employee_FK":random.choice(employeeIDs),
+        "Employee_FK":random.choice(employee_ids),
         "Certificate_Name":fake.sentence(5),
         "Achievement_Level":fake.sentence(3),
-        "Qualification_FK": random.choice(qualificationIDs)
+        "Qualification_FK": random.choice(qualification_ids)
         }for x in range(no_certs)]
     
     execute_query(dbConnection, "USE Airport_DB;")
@@ -145,13 +145,13 @@ def generateCertificates(dbConnection):
     print("Certificates table finished")
     print("===============================================================")
     
-def generateCompanyVehicles(dbConnection):
-    departmentQuery = "SELECT Department_ID FROM Department;"
-    departmentIDs = getIDs(dbConnection, departmentQuery)
+def generate_company_vehicles(dbConnection):
+    department_query = "SELECT Department_ID FROM Department;"
+    department_ids = get_ids(dbConnection, department_query)
     vehicles =[{
         "Vehicle_Name":fake.machine_year_make_model(),
         "Vehicle_Driving_License_Requirement":random.choice(driving_cats),
-        "Department_FK":random.choice(departmentIDs)
+        "Department_FK":random.choice(department_ids)
         } for x in range(no_vehicles)
     ]
     execute_query(dbConnection, "USE Airport_DB;")
@@ -161,12 +161,12 @@ def generateCompanyVehicles(dbConnection):
     print("CompanyVehicle table finished")
     print("===============================================================")
     
-def generateCustomers(dbConnection):
-    parkingSpotQuery = "SELECT Parking_Spot_ID FROM CustomerParkingSpot;"
-    parkingSpotIDs = getIDs(dbConnection, parkingSpotQuery)
+def generate_customers(dbConnection):
+    parking_spot_query = "SELECT Parking_Spot_ID FROM CustomerParkingSpot;"
+    parking_spot_ids = get_ids(dbConnection, parking_spot_query)
     customers = [{
         "Express_Lane":0 if (random.randrange(1,10)<9) else 1, #90% chance to not have express lane
-        "Token_FK":random.choice(parkingSpotIDs)
+        "Token_FK":random.choice(parking_spot_ids)
         } for x in range(no_customers)]
     
     execute_query(dbConnection, "USE Airport_DB;")
@@ -176,7 +176,7 @@ def generateCustomers(dbConnection):
     print("Customer table finished")
     print("===============================================================")
     
-def generateCustomerParkingSpots(dbConnection):     
+def generate_customer_parking_spots(dbConnection):     
     stri=[]
     for x in range(no_customer_parking_spots):
         stri.append("{")
@@ -197,7 +197,7 @@ def generateCustomerParkingSpots(dbConnection):
     print("CustomerParkingSpot table finished")
     print("===============================================================")
     
-def generateDepartments(dbConnection):
+def generate_departments(dbConnection):
     departments =[{
         "Department_Name":department_names[x],
         "Department_Location":fake.street_name()
@@ -210,13 +210,13 @@ def generateDepartments(dbConnection):
     print("Department table finished")
     print("===============================================================")
         
-def generateEmployees(dbConnection):
-    employeeParkingSpotQuery = "SELECT Parking_Spot_ID  FROM EmployeeParkingSpot;"
-    companyVehicleQuery = "SELECT Vehicle_ID FROM CompanyVehicle;"
-    departmentQuery = "SELECT Department_ID FROM Department;"
-    employeeParkingSpotIDs = getIDs(dbConnection, employeeParkingSpotQuery)
-    companyVehicleIDs = getIDs(dbConnection, companyVehicleQuery)
-    departmentIDs = getIDs(dbConnection, departmentQuery)
+def generate_employees(dbConnection):
+    employee_parking_spot_query = "SELECT Parking_Spot_ID  FROM EmployeeParkingSpot;"
+    company_vehicle_query = "SELECT Vehicle_ID FROM CompanyVehicle;"
+    department_query = "SELECT Department_ID FROM Department;"
+    employee_parking_spot_ids = get_ids(dbConnection, employee_parking_spot_query)
+    company_vehicle_ids = get_ids(dbConnection, company_vehicle_query)
+    department_ids = get_ids(dbConnection, department_query)
     
     for x in range(no_employees):
         employees =[{
@@ -225,16 +225,16 @@ def generateEmployees(dbConnection):
                 "Title": fake.job(),
                 "Employment_Type":random.choice(employment_types),
                 "Salary":random.uniform(3000,100000),
-                "Supervisor":generateSupervisor(dbConnection),
+                "Supervisor":generate_supervisor(dbConnection),
                 "Address_Line_1":fake.street_name(),
                 "Address_Line_2":fake.building_number(),
                 "Postcode": fake.postcode(),
                 "City": fake.city(),
                 "Birth_Date":str(fake.date_this_century()),
-                "Parking_Spot_FK":random.choice(employeeParkingSpotIDs),
-                "Vehicle_FK":random.choice(companyVehicleIDs),
-                "Department_FK":random.choice(departmentIDs),
-                "Manage_Department":random.choice(departmentIDs)
+                "Parking_Spot_FK":random.choice(employee_parking_spot_ids),
+                "Vehicle_FK":random.choice(company_vehicle_ids),
+                "Department_FK":random.choice(department_ids),
+                "Manage_Department":random.choice(department_ids)
             }]
         
         execute_query(dbConnection, "USE Airport_DB;")
@@ -244,7 +244,7 @@ def generateEmployees(dbConnection):
     print("Employee table finished")
     print("===============================================================")
    
-def generateEmployeeParking(dbConnection):   
+def generate_employee_parking(dbConnection):   
     parking_types = ["Car Parking", "Motor Parking", "Handicap Parking"]       
     strii=[]
     for x in range(no_employee_parking_spots):
@@ -265,11 +265,11 @@ def generateEmployeeParking(dbConnection):
     print("EmployeeParking table finished")
     print("===============================================================")
  
-def generateFlight(dbConnection):
+def generate_flight(dbConnection):
     runwayQuery = "SELECT Runway_ID FROM Runway;"
     airlineQuery = "SELECT Company_ID FROM Airline;"
-    runwayIDs = getIDs(dbConnection, runwayQuery)
-    airlineIDs = getIDs(dbConnection, airlineQuery)
+    runwayIDs = get_ids(dbConnection, runwayQuery)
+    airlineIDs = get_ids(dbConnection, airlineQuery)
     
     flights = [{
         "Plane_Model":''.join(random.choice(string.ascii_uppercase) for _ in range(5)),
@@ -283,9 +283,9 @@ def generateFlight(dbConnection):
     execute_query(dbConnection, "USE Airport_DB;")
     populate(dbConnection, flights, "Flight")
     
-def generateParkingTokens(dbConnection):
+def generate_parking_tokens(dbConnection):
     parkingSpotQuery = "SELECT Parking_Spot_ID FROM CustomerParkingSpot;"
-    parkingSpotIDs = getIDs(dbConnection, parkingSpotQuery)
+    parkingSpotIDs = get_ids(dbConnection, parkingSpotQuery)
     parking_tokens = [{
         "Date":str(fake.date_time_this_month()),
         "Parking_Spot_FK":random.choice(parkingSpotIDs),
@@ -298,7 +298,7 @@ def generateParkingTokens(dbConnection):
     print("ParkingToken table finished")
     print("===============================================================")
     
-def generateQualification(dbConnection):
+def generate_qualification(dbConnection):
     qualifications = [{
         "Qualification_Type":fake.sentence(5),
         "Qualification_Name":fake.sentence(5)
@@ -311,7 +311,7 @@ def generateQualification(dbConnection):
     print("Qualification table finished")
     print("===============================================================")
 
-def generateRunway(dbConnection):
+def generate_runway(dbConnection):
     runways = [{
         "Length":random.uniform(2000,4000),
         "Width":random.uniform(8,80)
@@ -324,14 +324,14 @@ def generateRunway(dbConnection):
     print("Runway table finished")
     print("===============================================================")
 
-def generateTicket(dbConnection):
-    customerQuery = "SELECT Customer_ID FROM Customer;"
-    flightQuery = "SELECT Flight_ID FROM Flight;"
-    customerIDs = getIDs(dbConnection, customerQuery)
-    flightIDs = getIDs(dbConnection, flightQuery)
+def generate_ticket(dbConnection):
+    customer_query = "SELECT Customer_ID FROM Customer;"
+    flight_query = "SELECT Flight_ID FROM Flight;"
+    customer_ids = get_ids(dbConnection, customer_query)
+    flight_ids = get_ids(dbConnection, flight_query)
     tickets = [{
-        "Customer_FK":random.choice(customerIDs),
-        "Flight_FK":random.choice(flightIDs)
+        "Customer_FK":random.choice(customer_ids),
+        "Flight_FK":random.choice(flight_ids)
         } for x in range(no_tickets)]
     
     execute_query(dbConnection, "USE Airport_DB;")
@@ -341,17 +341,17 @@ def generateTicket(dbConnection):
     print("Ticket table finished")
     print("===============================================================")
 
-def generateEmployeeNames(dbConnection):
-    employeeQuery = "SELECT Employee_ID FROM Employee;"
-    employeeIDs = getIDs(dbConnection, employeeQuery)
+def generate_employee_names(dbConnection):
+    employee_query = "SELECT Employee_ID FROM Employee;"
+    employee_ids = get_ids(dbConnection, employee_query)
 
     names = [{
-        "Person_ID":employeeIDs[x],
+        "Person_ID":employee_ids[x],
         "First_Name":fake.first_name(),
         "Middle_Name":fake.first_name() if (random.randrange(1,10)<8) else "null", #some people do not have a middle name. chance: 20%
         "Last_Name":fake.last_name(),
         "Is_Employee": 1
-        }for x in range(len(employeeIDs))]
+        }for x in range(len(employee_ids))]
     
     execute_query(dbConnection, "USE Airport_DB;")
     populate(connection, names, "Name") 
@@ -360,17 +360,17 @@ def generateEmployeeNames(dbConnection):
     print("Name table - employees finished")
     print("===============================================================")
     
-def generateCustomerNames(dbConnection):
-    customerQuery = "SELECT Customer_ID FROM Customer;"
-    customerIDs = getIDs(dbConnection, customerQuery)
+def generate_customer_names(dbConnection):
+    customer_query = "SELECT Customer_ID FROM Customer;"
+    customer_ids = get_ids(dbConnection, customer_query)
 
     names = [{
-        "Person_ID":customerIDs[x],
+        "Person_ID":customer_ids[x],
         "First_Name":fake.first_name(),
         "Middle_Name":fake.first_name() if (random.randrange(1,10)<8) else "null", #some people do not have a middle name. chance: 20%
         "Last_Name":fake.last_name(),
         "Is_Employee": 0
-        }for x in range(len(customerIDs))]
+        }for x in range(len(customer_ids))]
     
     execute_query(dbConnection, "USE Airport_DB;")
     populate(connection, names, "Name") 
@@ -385,18 +385,18 @@ def generateCustomerNames(dbConnection):
 
 connection = create_server_connection("localhost","30330", "my_user", "my_password")
 
-generateRunway(connection)
-generateAirlines(connection)
-generateFlight(connection)
-generateQualification(connection)
-generateCustomerParkingSpots(connection)
-generateEmployeeParking(connection)
-generateParkingTokens(connection)
-generateCustomers(connection)
-generateTicket(connection)
-generateDepartments(connection)
-generateCompanyVehicles(connection)
-generateEmployees(connection)
-generateCertificates(connection)
-generateEmployeeNames(connection)
-generateCustomerNames(connection)
+generate_runway(connection)
+generate_airlines(connection)
+generate_flight(connection)
+generate_qualification(connection)
+generate_customer_parking_spots(connection)
+generate_employee_parking(connection)
+generate_parking_tokens(connection)
+generate_customers(connection)
+generate_ticket(connection)
+generate_departments(connection)
+generate_company_vehicles(connection)
+generate_employees(connection)
+generate_certificates(connection)
+generate_employee_names(connection)
+generate_customer_names(connection)
