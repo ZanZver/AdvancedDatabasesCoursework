@@ -165,7 +165,7 @@ ALTER TABLE Airport_DB.Certificate ADD CONSTRAINT Certificate_FK_Qualification F
 -- Company vehicle table
 ALTER TABLE Airport_DB.CompanyVehicle ADD CONSTRAINT CompanyVehicle_FK_Department FOREIGN KEY (Department_FK) REFERENCES Airport_DB.Department(Department_ID) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
--- Certificate table
+-- Customer table
 ALTER TABLE Airport_DB.Customer ADD CONSTRAINT Customer_FK_ParkingToken FOREIGN KEY (Token_FK) REFERENCES Airport_DB.ParkingToken(Token_ID);
 
 -- Employee table
