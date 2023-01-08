@@ -1,4 +1,6 @@
 -- Optimization technique
+
+-- Person Name table
 CREATE TABLE `Name` (
   `Person_ID` int(11) NOT NULL,
   `First_Name` varchar(48) NOT NULL,
@@ -10,7 +12,6 @@ CREATE TABLE `Name` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
 PARTITION BY RANGE (Is_Employee)
 (
-	PARTITION p0 VALUES LESS THAN (0),
-	PARTITION p1 VALUES LESS THAN (1),
-	PARTITION p2 VALUES LESS THAN (2)
+	PARTITION Customer_Partition VALUES LESS THAN (1),
+	PARTITION Employee_Partition VALUES LESS THAN (2)
 );
