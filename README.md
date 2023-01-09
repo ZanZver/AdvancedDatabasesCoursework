@@ -110,4 +110,7 @@ DataMiningCoursework
 │    └─── Design
 │        │    Design.png
 │        │    └───   Physical design representation
+│    └─── Report
+│        │    ZanZver18133498.pdf
+│        │    └───   Written report about the project.
 ```
