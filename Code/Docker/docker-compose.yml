@@ -1,0 +1,76 @@
+version: '2.1'
+
+name: MariadbCluster
+
+networks:
+  app-tier:
+    driver: galera-cluster-net #docker network create -d bridge galera-cluster-net 
+
+services:
+  mariadb-galera-0:
+    container_name: mariadb-galera-0
+    image: 'bitnami/mariadb-galera:latest'
+    environment:
+      - MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
+      - MARIADB_GALERA_CLUSTER_NAME=my_galera
+      - MARIADB_GALERA_MARIABACKUP_USER=my_mariabackup_user
+      - MARIADB_GALERA_MARIABACKUP_PASSWORD=my_mariabackup_password
+      - MARIADB_ROOT_PASSWORD=my_root_password
+      - MARIADB_USER=my_user
+      - MARIADB_PASSWORD=my_password
+      - MARIADB_DATABASE=Airport_DB
+    ports:
+      - "30330:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    
+  mariadb-galera-1:
+    container_name: mariadb-galera-1
+    image: 'bitnami/mariadb-galera:latest'
+    links: 
+      - 'mariadb-galera-0:mariadb-galera'
+    environment:
+      - MARIADB_GALERA_CLUSTER_NAME=my_galera
+      - MARIADB_GALERA_CLUSTER_ADDRESS=gcomm://mariadb-galera
+      - MARIADB_GALERA_MARIABACKUP_USER=my_mariabackup_user
+      - MARIADB_GALERA_MARIABACKUP_PASSWORD=my_mariabackup_password
+    ports:
+      - "30331:3306"
+    depends_on:
+      mariadb-galera-0:
+        condition: service_healthy
+
+  mariadb-galera-2:
+    container_name: mariadb-galera-2
+    image: 'bitnami/mariadb-galera:latest'
+    links: 
+      - 'mariadb-galera-0:mariadb-galera'
+    environment:
+      - MARIADB_GALERA_CLUSTER_NAME=my_galera
+      - MARIADB_GALERA_CLUSTER_ADDRESS=gcomm://mariadb-galera
+      - MARIADB_GALERA_MARIABACKUP_USER=my_mariabackup_user
+      - MARIADB_GALERA_MARIABACKUP_PASSWORD=my_mariabackup_password
+    ports:
+      - "30332:3306"
+    depends_on:
+      mariadb-galera-0:
+        condition: service_healthy
+
+  mariadb-galera-3:
+    container_name: mariadb-galera-3
+    image: 'bitnami/mariadb-galera:latest'
+    links: 
+      - 'mariadb-galera-0:mariadb-galera'
+    environment:
+      - MARIADB_GALERA_CLUSTER_NAME=my_galera
+      - MARIADB_GALERA_CLUSTER_ADDRESS=gcomm://mariadb-galera
+      - MARIADB_GALERA_MARIABACKUP_USER=my_mariabackup_user
+      - MARIADB_GALERA_MARIABACKUP_PASSWORD=my_mariabackup_password
+    ports:
+      - "30333:3306"
+    depends_on:
+      mariadb-galera-0:
+        condition: service_healthy
